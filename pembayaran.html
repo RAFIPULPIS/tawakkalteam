@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Pembayaran Booking</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg">
+    <h1 class="text-3xl font-bold text-gray-800 text-center mb-6">Pembayaran Booking</h1>
+
+    <!-- Cart Item -->
+    <div class="border rounded-2xl shadow p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-2 uppercase" id="paket">Graduation</h2>
+      <p class="mb-4 text-gray-500">Paket foto kelulusan personal atau kelompok, dengan style dokumenter atau candid.</p>
+      <p class="text-3xl font-bold mb-2 text-green-600" id="harga">Rp2.000.000<span class="text-base font-normal text-gray-600"> / sesi</span></p>
+
+      <div>
+        <h3 class="font-semibold mb-2">Termasuk:</h3>
+        <ul class="space-y-1 text-gray-700" id="fitur-list">
+          <li>✓ 1 fotografer</li>
+          <li>✓ Durasi 2 jam pemotretan</li>
+          <li>✓ 20+ foto edit</li>
+          <li>✓ Background & styling dibantu</li>
+          <li class="text-red-500">✗ Video dokumentasi</li>
+          <li class="text-red-500">✗ Indoor studio</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Tanggal Booking -->
+    <div class="flex justify-between mb-6">
+      <span class="text-gray-600">📅 Tanggal Booking</span>
+      <span id="tanggal" class="font-semibold text-gray-800">25 April 2025</span>
+    </div>
+
+    <!-- Informasi Pembayaran -->
+    <div class="border rounded-xl p-4 mb-6 bg-gray-50 space-y-4">
+      <h3 class="text-lg font-semibold mb-2">Nomor Rekening</h3>
+
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="font-medium text-gray-800">BCA</p>
+          <p class="text-gray-700">123-456-7890 a.n. PT Photoworks Indonesia</p>
+          <p id="rekBCA" class="text-gray-700" style="display: none;">1234567890</p>
+        </div>
+        <button onclick="salin('rekBCA')" class="text-blue-600 font-semibold hover:underline">Salin</button>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="font-medium text-gray-800">Mandiri</p>
+          <p class="text-gray-700">098-765-4321 a.n. PT Photoworks Indonesia</p>
+          <p id="rekMandiri" class="text-gray-700" style="display: none;">0987654321</p>
+        </div>
+        <button onclick="salin('rekMandiri')" class="text-blue-600 font-semibold hover:underline">Salin</button>
+      </div>
+    </div>
+
+    <!-- Tombol Konfirmasi -->
+    <button 
+      onclick="konfirmasiPembayaran()"
+      class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-lg transition duration-300"
+    >
+      Konfirmasi via WhatsApp
+    </button>
+  </div>
+
+  <script>
+    // Simulasi data booking
+    const paket = "Graduation";
+    const harga = "Rp2.000.000 / sesi";
+    const tanggal = "25 April 2025";
+    const nomorWA = "6281234567890";
+
+    const fitur = [
+      "✓ 1 fotografer",
+      "✓ Durasi 2 jam pemotretan",
+      "✓ 20+ foto edit",
+      "✓ Background & styling dibantu",
+      "✗ Video dokumentasi",
+      "✗ Indoor studio"
+    ];
+
+    // Tampilkan data booking ke halaman
+    document.getElementById('paket').textContent = paket;
+    document.getElementById('harga').textContent = harga;
+    document.getElementById('tanggal').textContent = tanggal;
+
+    // Tampilkan fitur cart
+    const fiturList = document.getElementById('fitur-list');
+    fiturList.innerHTML = fitur.map(item => {
+      const isNegative = item.startsWith("✗");
+      return `<li class="${isNegative ? 'text-red-500' : ''}">${item}</li>`;
+    }).join('');
+
+    // Fungsi untuk konfirmasi via WhatsApp
+    function konfirmasiPembayaran() {
+      const pesan = `Halo admin, saya ingin konfirmasi pembayaran booking:\n\n📦 Paket: ${paket}\n💰 Harga: ${harga}\n📅 Tanggal Booking: ${tanggal}\n\nSaya sudah melakukan pembayaran ke rekening perusahaan.\n\nFitur:\n${fitur.join('\n')}\n\nMohon dicek dan dikonfirmasi. Terima kasih 🙏`;
+      const linkWA = `https://wa.me/${nomorWA}?text=${encodeURIComponent(pesan)}`;
+      window.open(linkWA, '_blank');
+    }
+
+    // Fungsi salin rekening
+    function salin(id) {
+      const text = document.getElementById(id).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        alert(`Nomor rekening berhasil disalin: ${text}`);
+      });
+    }
+  </script>
+
+</body>
+</html>

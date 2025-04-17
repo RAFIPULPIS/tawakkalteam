@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Booking Jadwal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4 sm:p-8">
+
+<div class="max-w-3xl mx-auto p-4 sm:p-6 bg-white rounded-xl shadow-md space-y-6">
+  <!-- Filter Section -->
+  <div class="bg-gray-100 p-4 rounded-lg mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <h2 class="text-2xl font-bold text-center sm:text-left flex-1">📅 Booking Jadwal</h2>
+    
+    <!-- Filter Bulan -->
+    <div x-data="{ open: false, selected: '📅 Pilih Bulan' }" class="relative inline-block text-left w-full sm:w-auto">
+      <button @click="open = !open"
+              class="px-5 py-3 bg-white/60 backdrop-blur-lg border border-gray-300 rounded-2xl shadow-lg flex items-center justify-between w-full sm:w-52 text-gray-800 font-semibold hover:bg-white/80 transition duration-300">
+        <span x-text="selected"></span>
+        <svg class="w-5 h-5 ml-2 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+
+      <!-- Dropdown -->
+      <div x-show="open" @click.away="open = false"
+           x-transition:enter="transition ease-out duration-200"
+           x-transition:enter-start="opacity-0 scale-90"
+           x-transition:enter-end="opacity-100 scale-100"
+           x-transition:leave="transition ease-in duration-150"
+           x-transition:leave-start="opacity-100 scale-100"
+           x-transition:leave-end="opacity-0 scale-90"
+           class="absolute mt-3 bg-white/80 backdrop-blur-lg border border-gray-200 rounded-2xl shadow-xl w-full sm:w-52 z-20 overflow-hidden">
+        <ul class="divide-y divide-gray-300">
+          <li @click="selected='April'; open=false" class="px-5 py-3 hover:bg-blue-500 hover:text-white cursor-pointer transition duration-300">April</li>
+          <li @click="selected='Mei'; open=false" class="px-5 py-3 hover:bg-blue-500 hover:text-white cursor-pointer transition duration-300">Mei</li>
+          <li @click="selected='Juni'; open=false" class="px-5 py-3 hover:bg-blue-500 hover:text-white cursor-pointer transition duration-300">Juni</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Filter Jam -->
+    <div x-data="{ open: false, selected: '⏲ Pilih jam' }" class="relative inline-block text-left w-full sm:w-auto">
+      <button @click="open = !open"
+              class="px-5 py-3 bg-white/60 backdrop-blur-lg border border-gray-300 rounded-2xl shadow-lg flex items-center justify-between w-full sm:w-52 text-gray-800 font-semibold hover:bg-white/80 transition duration-300">
+        <span x-text="selected"></span>
+        <svg class="w-5 h-5 ml-2 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+
+      <!-- Dropdown -->
+      <div x-show="open" @click.away="open = false"
+           x-transition:enter="transition ease-out duration-200"
+           x-transition:enter-start="opacity-0 scale-90"
+           x-transition:enter-end="opacity-100 scale-100"
+           x-transition:leave="transition ease-in duration-150"
+           x-transition:leave-start="opacity-100 scale-100"
+           x-transition:leave-end="opacity-0 scale-90"
+           class="absolute mt-3 bg-white/80 backdrop-blur-lg border border-gray-200 rounded-2xl shadow-xl w-full sm:w-52 z-20 overflow-hidden">
+        <ul class="divide-y divide-gray-300">
+          <li @click="selected='08.00 - 10.00'; open=false" class="px-5 py-3 hover:bg-blue-500 hover:text-white cursor-pointer transition duration-300">08.00 - 10.00</li>
+          <li @click="selected='12.00 - 14.00'; open=false" class="px-5 py-3 hover:bg-blue-500 hover:text-white cursor-pointer transition duration-300">12.00 - 14.00</li>
+          <li @click="selected='15.00 - 17.00'; open=false" class="px-5 py-3 hover:bg-blue-500 hover:text-white cursor-pointer transition duration-300">15.00 - 17.00</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tanggal -->
+  <div class="grid grid-cols-5 sm:grid-cols-7 gap-2" id="tanggalGrid">
+    <!-- Di-generate oleh JS -->
+  </div>
+
+  <!-- cart -->
+   <!-- Cart Pilihan Paket -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6" id="paketPilihan">
+  <div onclick="pilihPaket('Prewedding')" class="border rounded-2xl shadow p-6 cursor-pointer hover:ring-4 hover:ring-blue-300 transition">
+    <h2 class="text-xl font-semibold mb-2 uppercase">Prewedding</h2>
+    <p class="mb-4 text-gray-500">Paket foto prewedding konsep bebas, lokasi outdoor/indoor.</p>
+    <p class="text-3xl font-bold mb-2">Rp4.000.000<span class="text-base font-normal"> / sesi</span></p>
+    <div>
+      <h3 class="font-semibold mb-2">Termasuk:</h3>
+      <ul class="space-y-1">
+        <li>✓ 1 fotografer</li>
+        <li>✓ 4 jam pemotretan</li>
+        <li>✓ 30+ foto edit high-res</li>
+        <li>✓ Revisi warna & tone</li>
+        <li class="text-red-500">✗ Video dokumentasi</li>
+        <li class="text-red-500">✗ Cetak album</li>
+      </ul>
+    </div>
+  </div>
+
+  <div onclick="pilihPaket('Wedding')" class="border rounded-2xl shadow p-6 cursor-pointer hover:ring-4 hover:ring-blue-300 transition">
+    <h2 class="text-xl font-semibold mb-2 uppercase">Wedding</h2>
+    <p class="mb-4 text-gray-500">Paket foto wedding untuk akad & resepsi.</p>
+    <p class="text-3xl font-bold mb-2">Rp7.000.000<span class="text-base font-normal"> / hari</span></p>
+    <div>
+      <h3 class="font-semibold mb-2">Termasuk:</h3>
+      <ul class="space-y-1">
+        <li>✓ 2 fotografer</li>
+        <li>✓ Full day dokumentasi</li>
+        <li>✓ 100+ foto edit high-res</li>
+        <li>✓ Video dokumentasi</li>
+        <li>✓ Album cetak</li>
+      </ul>
+    </div>
+  </div>
+
+  <div onclick="pilihPaket('Graduation')" class="border rounded-2xl shadow p-6 cursor-pointer hover:ring-4 hover:ring-blue-300 transition">
+    <h2 class="text-xl font-semibold mb-2 uppercase">Graduation</h2>
+    <p class="mb-4 text-gray-500">Paket foto wisuda indoor / outdoor.</p>
+    <p class="text-3xl font-bold mb-2">Rp800.000<span class="text-base font-normal"> / sesi</span></p>
+    <div>
+      <h3 class="font-semibold mb-2">Termasuk:</h3>
+      <ul class="space-y-1">
+        <li>✓ 1 fotografer</li>
+        <li>✓ 2 jam pemotretan</li>
+        <li>✓ 15+ foto edit high-res</li>
+        <li class="text-red-500">✗ Video dokumentasi</li>
+        <li class="text-red-500">✗ Cetak album</li>
+      </ul>
+    </div>
+  </div>
+
+  <div onclick="pilihPaket('Family')" class="border rounded-2xl shadow p-6 cursor-pointer hover:ring-4 hover:ring-blue-300 transition">
+    <h2 class="text-xl font-semibold mb-2 uppercase">Family</h2>
+    <p class="mb-4 text-gray-500">Paket foto keluarga indoor / outdoor.</p>
+    <p class="text-3xl font-bold mb-2">Rp1.500.000<span class="text-base font-normal"> / sesi</span></p>
+    <div>
+      <h3 class="font-semibold mb-2">Termasuk:</h3>
+      <ul class="space-y-1">
+        <li>✓ 1 fotografer</li>
+        <li>✓ 3 jam pemotretan</li>
+        <li>✓ 25+ foto edit high-res</li>
+        <li>✓ Cetak album</li>
+        <li class="text-red-500">✗ Video dokumentasi</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+  <!-- Form Booking -->
+  <!-- Form Booking -->
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <button class="bg-green-500 text-white px-6 py-3 rounded-lg text-lg hover:bg-green-600 transition">
+    Simpan Booking
+  </button>
+</div>
+
+  
+
+</div>
+
+<script>
+  
+  
+  const tanggalGrid = document.getElementById('tanggalGrid');
+  const formBooking = document.getElementById('formBooking');
+  const jamSelect = document.getElementById('jamSelect');
+  const paketSelect = document.getElementById('paketSelect');
+
+  let tanggalDipilih = null;
+  let metodePembayaran = null;
+
+  const tanggalBooked = [3, 5, 10, 12, 22];
+  const tanggalSebagianBooked = [6, 14, 18]; // ini yang kuning
+
+  for (let i = 1; i <= 30; i++) {
+    const btn = document.createElement('button');
+    btn.textContent = i;
+    btn.className = "p-3 rounded-lg text-white focus:outline-none text-sm sm:text-base";
+
+    if (tanggalBooked.includes(i)) {
+      btn.classList.add("bg-red-500", "cursor-not-allowed");
+      btn.disabled = true;
+    } else if (tanggalSebagianBooked.includes(i)) {
+        btn.classList.add("bg-blue-400", "hover:bg-blue-500");  
+      btn.onclick = () => {
+        resetTanggal();
+        btn.classList.add("ring", "ring-4", "ring-blue-500");
+        tanggalDipilih = i;
+        tampilkanForm("sebagian");
+      }
+    } else {
+      btn.classList.add("bg-green-500", "hover:bg-green-600");
+      btn.onclick = () => {
+        resetTanggal();
+        btn.classList.add("ring", "ring-4", "ring-blue-500");
+        tanggalDipilih = i;
+        tampilkanForm("kosong");
+      }
+    }
+    tanggalGrid.appendChild(btn);
+  }
+
+  function resetTanggal() {
+    document.querySelectorAll('#tanggalGrid button').forEach(b => {
+      if (!b.disabled) b.classList.remove("ring", "ring-4", "ring-blue-500");
+    });
+  }
+
+  function tampilkanForm(status) {
+    formBooking.classList.remove("hidden");
+
+    // reset pilihan jam
+    jamSelect.innerHTML = "";
+    const opsiJam = document.createElement("option");
+    opsiJam.textContent = "Pilih Jam";
+    jamSelect.appendChild(opsiJam);
+
+    let jamTersedia = [];
+
+    if (status === "kosong") {
+      jamTersedia = ["08.00 - 10.00", "10.00 - 12.00", "13.00 - 15.00", "15.00 - 17.00"];
+    } else if (status === "sebagian") {
+      jamTersedia = ["13.00 - 15.00", "15.00 - 17.00"];
+    }
+
+    jamTersedia.forEach(j => {
+      const opt = document.createElement("option");
+      opt.textContent = j;
+      jamSelect.appendChild(opt);
+    });
+
+    paketSelect.value = "Pilih Paket";
+    metodePembayaran = null;
+  }
+
+  function pilihPembayaran(metode) {
+    metodePembayaran = metode;
+    alert(`✅ Tanggal ${tanggalDipilih} dipilih, pembayaran via ${metode}`);
+  }
+
+  function simpanBooking() {
+    const jam = jamSelect.value;
+    const paket = paketSelect.value;
+
+    if (!jam || jam === "Pilih Jam" || !paket || paket === "Pilih Paket" || !metodePembayaran) {
+      alert("⚠️ Lengkapi semua pilihan dulu bro!");
+      return;
+    }
+
+    alert(`📌 Booking berhasil!\nTanggal: ${tanggalDipilih}\nJam: ${jam}\nPaket: ${paket}\nPembayaran: ${metodePembayaran}`);
+  }
+
+  let jamDipilih = null;
+let paketDipilih = null;
+
+function tampilkanForm(status) {
+  formBooking.classList.remove("hidden");
+
+  // reset tombol jam
+  const jamButtons = document.getElementById('jamButtons');
+  jamButtons.innerHTML = "";
+
+  let jamTersedia = [];
+
+  if (status === "kosong") {
+    jamTersedia = ["08.00 - 10.00", "10.00 - 12.00", "13.00 - 15.00", "15.00 - 17.00"];
+  } else if (status === "sebagian") {
+    jamTersedia = ["13.00 - 15.00", "15.00 - 17.00"];
+  }
+
+  jamTersedia.forEach(jam => {
+    const btn = document.createElement("button");
+    btn.textContent = jam;
+    btn.className = "px-4 py-2 border rounded-lg hover:bg-gray-100";
+    btn.onclick = () => {
+      jamDipilih = jam;
+      document.querySelectorAll("#jamButtons button").forEach(b => b.classList.remove("bg-blue-500", "text-white"));
+      btn.classList.add("bg-blue-500", "text-white");
+    };
+    jamButtons.appendChild(btn);
+  });
+
+  // reset pilihan
+  jamDipilih = null;
+  paketDipilih = null;
+  metodePembayaran = null;
+}
+
+function pilihPaket(paket) {
+  paketDipilih = paket;
+  document.querySelectorAll("#formBooking div:nth-of-type(2) button").forEach(b => b.classList.remove("bg-blue-500", "text-white"));
+  event.target.classList.add("bg-blue-500", "text-white");
+}
+
+function pilihPembayaran(metode) {
+  metodePembayaran = metode;
+  document.querySelectorAll("#formBooking div:nth-of-type(3) button").forEach(b => b.classList.remove("bg-blue-500", "text-white"));
+  event.target.classList.add("bg-blue-500", "text-white");
+}
+
+function simpanBooking() {
+  if (!jamDipilih || !paketDipilih || !metodePembayaran) {
+    alert("⚠️ Lengkapi semua pilihan dulu bro!");
+    return;
+  }
+
+  // Simpan ke localStorage (contoh)
+  const booking = {
+    tanggal: tanggalDipilih,
+    jam: jamDipilih,
+    paket: paketDipilih,
+    pembayaran: metodePembayaran
+  };
+  localStorage.setItem("bookingTerakhir", JSON.stringify(booking));
+
+  alert(`📌 Booking berhasil!
+Tanggal: ${tanggalDipilih}
+Jam: ${jamDipilih}
+Paket: ${paketDipilih}
+Pembayaran: ${metodePembayaran}`);
+
+  // redirect ke home
+  window.location.href = "home.html";
+}
+
+
+</script>
+<script src="//unpkg.com/alpinejs" defer></script>
+</body>
+</html>
